@@ -19,20 +19,24 @@ public class MenuPrincipal {
     public void exibir() {
         System.out.println("\nInforme o tipo de veículo que você procura ('carros', 'motos', 'caminhoes'):");
         String veiculo = scan.nextLine();
-        var json = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas");
 
+        var json = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas");
         List<DadosMarca> dadosMarca = conversor.converterLista(json, DadosMarca.class);
 
-        System.out.println(dadosMarca);
+        System.out.println(" ");
+        dadosMarca.stream()
+                        .forEach(marca -> System.out.println("Código: " + marca.codigo() + " | Nome: " + marca.nome()));
 
-//        System.out.println("Teste o Código:");
-//        String codMarca = scan.nextLine();
-//
-//        var marcaEscolhida = dadosMarca.stream()
-//                .filter(marca -> Objects.equals(marca.codigo(), codMarca))
-//                .findFirst();
-//
-//        System.out.println(marcaEscolhida.get().codigo());
-//        System.out.println(marcaEscolhida.get().nomeDaMarca());
+        System.out.println("\nInforme o código da marcar que você está buscando:");
+        String codMarca = scan.nextLine();
+
+        var marcaEscolhida = dadosMarca.stream()
+                .filter(marca -> Objects.equals(marca.codigo(), codMarca))
+                .findFirst();
+
+        json = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos");
+
+        System.out.println(json);
+
     }
 }
