@@ -19,6 +19,7 @@ public class MenuPrincipal {
 
     public void exibir() {
         // Fase 1
+
         System.out.println("\nInforme o tipo de veículo que você procura ('carros', 'motos', 'caminhoes'):");
         String veiculo = scan.nextLine();
 
@@ -56,6 +57,17 @@ public class MenuPrincipal {
                 .forEach(modelo -> System.out.println("Código: " + modelo.codigo() + " | Modelo: " + modelo.nome()));
 
         // Fase 4
+
+        System.out.println("\nAgora informe o código do modelo que você está buscando:");
+        String codModelo = scan.nextLine();
+
+        var modeloEscolhido = dadosModelos.modelos().stream()
+                .filter(modelo -> Objects.equals(modelo.codigo(), codModelo))
+                .findFirst();
+
+        json = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos/" + modeloEscolhido.get().codigo() + "/anos");
+
+        System.out.println(json);
 
     }
 }
