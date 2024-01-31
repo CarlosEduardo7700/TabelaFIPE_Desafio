@@ -1,4 +1,4 @@
-package br.com.alura.tabelafipe.service;
+package br.com.alura.tabelafipe.services;
 
 import java.io.IOException;
 import java.net.URI;

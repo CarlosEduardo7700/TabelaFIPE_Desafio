@@ -1,12 +1,18 @@
 package br.com.alura.tabelafipe.controllers;
 
-import br.com.alura.tabelafipe.service.ConsumirAPI;
+import br.com.alura.tabelafipe.models.DadosMarca;
+import br.com.alura.tabelafipe.services.ConsumirAPI;
+import br.com.alura.tabelafipe.services.ConversorDeDados;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class MenuPrincipal {
 
     private ConsumirAPI consumirAPI = new ConsumirAPI();
+
+    private ConversorDeDados conversor = new ConversorDeDados();
 
     private Scanner scan = new Scanner(System.in);
 
@@ -14,6 +20,19 @@ public class MenuPrincipal {
         System.out.println("\nInforme o tipo de veículo que você procura ('carros', 'motos', 'caminhoes'):");
         String veiculo = scan.nextLine();
         var json = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas");
-        System.out.println(json);
+
+        List<DadosMarca> dadosMarca = conversor.converterLista(json, DadosMarca.class);
+
+        System.out.println(dadosMarca);
+
+//        System.out.println("Teste o Código:");
+//        String codMarca = scan.nextLine();
+//
+//        var marcaEscolhida = dadosMarca.stream()
+//                .filter(marca -> Objects.equals(marca.codigo(), codMarca))
+//                .findFirst();
+//
+//        System.out.println(marcaEscolhida.get().codigo());
+//        System.out.println(marcaEscolhida.get().nomeDaMarca());
     }
 }
