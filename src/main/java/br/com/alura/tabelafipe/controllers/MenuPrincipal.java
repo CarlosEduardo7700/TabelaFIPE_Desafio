@@ -18,6 +18,7 @@ public class MenuPrincipal {
     private Scanner scan = new Scanner(System.in);
 
     public void exibir() {
+        // Fase 1
         System.out.println("\nInforme o tipo de veículo que você procura ('carros', 'motos', 'caminhoes'):");
         String veiculo = scan.nextLine();
 
@@ -26,7 +27,9 @@ public class MenuPrincipal {
 
         System.out.println(" ");
         dados.stream()
-                        .forEach(marca -> System.out.println("Código: " + marca.codigo() + " | Nome: " + marca.nome()));
+                        .forEach(marca -> System.out.println("Código: " + marca.codigo() + " | Marcas: " + marca.nome()));
+
+        // Fase 2
 
         System.out.println("\nInforme o código da marcar que você está buscando:");
         String codMarca = scan.nextLine();
@@ -38,7 +41,21 @@ public class MenuPrincipal {
         json = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos");
         DadosModelo dadosModelos = conversor.converterObjeto(json, DadosModelo.class);
 
-        System.out.println(dadosModelos);
+        System.out.println(" ");
+        dadosModelos.modelos().stream()
+                        .forEach(modelo -> System.out.println("Modelo: " + modelo.nome()));
+
+        // Fase 3
+
+        System.out.println("\nAgora informe uma parte ou em completo o nome do modelo que você está buscando:");
+        String nomeModelo = scan.nextLine();
+
+        System.out.println(" ");
+        dadosModelos.modelos().stream()
+                .filter(modelo -> modelo.nome().toUpperCase().contains(nomeModelo.toUpperCase()))
+                .forEach(modelo -> System.out.println("Código: " + modelo.codigo() + " | Modelo: " + modelo.nome()));
+
+        // Fase 4
 
     }
 }
