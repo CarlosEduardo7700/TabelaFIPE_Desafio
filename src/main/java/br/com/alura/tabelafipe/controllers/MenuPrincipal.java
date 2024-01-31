@@ -1,6 +1,7 @@
 package br.com.alura.tabelafipe.controllers;
 
-import br.com.alura.tabelafipe.models.DadosMarca;
+import br.com.alura.tabelafipe.models.Dados;
+import br.com.alura.tabelafipe.models.DadosModelo;
 import br.com.alura.tabelafipe.services.ConsumirAPI;
 import br.com.alura.tabelafipe.services.ConversorDeDados;
 
@@ -21,22 +22,23 @@ public class MenuPrincipal {
         String veiculo = scan.nextLine();
 
         var json = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas");
-        List<DadosMarca> dadosMarca = conversor.converterLista(json, DadosMarca.class);
+        List<Dados> dados = conversor.converterLista(json, Dados.class);
 
         System.out.println(" ");
-        dadosMarca.stream()
+        dados.stream()
                         .forEach(marca -> System.out.println("Código: " + marca.codigo() + " | Nome: " + marca.nome()));
 
         System.out.println("\nInforme o código da marcar que você está buscando:");
         String codMarca = scan.nextLine();
 
-        var marcaEscolhida = dadosMarca.stream()
+        var marcaEscolhida = dados.stream()
                 .filter(marca -> Objects.equals(marca.codigo(), codMarca))
                 .findFirst();
 
         json = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos");
+        DadosModelo dadosModelos = conversor.converterObjeto(json, DadosModelo.class);
 
-        System.out.println(json);
+        System.out.println(dadosModelos);
 
     }
 }
