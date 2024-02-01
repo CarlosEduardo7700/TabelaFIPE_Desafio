@@ -2,6 +2,7 @@ package br.com.alura.tabelafipe.controllers;
 
 import br.com.alura.tabelafipe.models.Dados;
 import br.com.alura.tabelafipe.models.DadosModelo;
+import br.com.alura.tabelafipe.models.DadosVeiculo;
 import br.com.alura.tabelafipe.services.ConsumirAPI;
 import br.com.alura.tabelafipe.services.ConversorDeDados;
 
@@ -58,7 +59,7 @@ public class MenuPrincipal {
 
         // Fase 4
 
-        System.out.println("\nAgora informe o código do modelo que você está buscando:");
+        System.out.println("\nAgora informe o código do modelo para confirmar os valores:");
         String codModelo = scan.nextLine();
 
         var modeloEscolhido = dadosModelos.modelos().stream()
@@ -66,8 +67,14 @@ public class MenuPrincipal {
                 .findFirst();
 
         json = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos/" + modeloEscolhido.get().codigo() + "/anos");
+        List<Dados> dadosAnos = conversor.converterLista(json, Dados.class);
 
-        System.out.println(json);
+        System.out.println(" ");
+        dadosAnos.forEach(ano -> {
+            String jsonVeiculo = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos/" + modeloEscolhido.get().codigo() + "/anos/" + ano.codigo());
+            DadosVeiculo dadosVeiculo = conversor.converterObjeto(jsonVeiculo, DadosVeiculo.class);
+            System.out.println(dadosVeiculo);
+        });
 
     }
 }
