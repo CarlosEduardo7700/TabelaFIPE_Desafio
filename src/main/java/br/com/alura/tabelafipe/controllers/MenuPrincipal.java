@@ -18,13 +18,15 @@ public class MenuPrincipal {
 
     private Scanner scan = new Scanner(System.in);
 
+    private String ENDERECO = "https://parallelum.com.br/fipe/api/v1/";
+
     public void exibir() {
         // Fase 1
 
         System.out.println("\nInforme o tipo de veículo que você procura ('carros', 'motos', 'caminhoes'):");
         String veiculo = scan.nextLine();
 
-        var json = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas");
+        var json = consumirAPI.obterDados(ENDERECO + veiculo + "/marcas");
         List<Dados> dados = conversor.converterLista(json, Dados.class);
 
         System.out.println(" ");
@@ -40,7 +42,7 @@ public class MenuPrincipal {
                 .filter(marca -> Objects.equals(marca.codigo(), codMarca))
                 .findFirst();
 
-        json = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos");
+        json = consumirAPI.obterDados(ENDERECO + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos");
         DadosModelo dadosModelos = conversor.converterObjeto(json, DadosModelo.class);
 
         System.out.println(" ");
@@ -66,12 +68,12 @@ public class MenuPrincipal {
                 .filter(modelo -> Objects.equals(modelo.codigo(), codModelo))
                 .findFirst();
 
-        json = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos/" + modeloEscolhido.get().codigo() + "/anos");
+        json = consumirAPI.obterDados(ENDERECO + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos/" + modeloEscolhido.get().codigo() + "/anos");
         List<Dados> dadosAnos = conversor.converterLista(json, Dados.class);
 
         System.out.println(" ");
         dadosAnos.forEach(ano -> {
-            String jsonVeiculo = consumirAPI.obterDados("https://parallelum.com.br/fipe/api/v1/" + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos/" + modeloEscolhido.get().codigo() + "/anos/" + ano.codigo());
+            String jsonVeiculo = consumirAPI.obterDados(ENDERECO + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos/" + modeloEscolhido.get().codigo() + "/anos/" + ano.codigo());
             DadosVeiculo dadosVeiculo = conversor.converterObjeto(jsonVeiculo, DadosVeiculo.class);
             System.out.println(dadosVeiculo);
         });
