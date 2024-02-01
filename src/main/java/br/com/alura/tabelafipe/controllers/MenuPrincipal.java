@@ -18,13 +18,21 @@ public class MenuPrincipal {
 
     private Scanner scan = new Scanner(System.in);
 
-    private String ENDERECO = "https://parallelum.com.br/fipe/api/v1/";
+    private final String ENDERECO = "https://parallelum.com.br/fipe/api/v1/";
 
     public void exibir() {
         // Fase 1
 
-        System.out.println("\nInforme o tipo de veículo que você procura ('carros', 'motos', 'caminhoes'):");
+        System.out.println("\nInforme o tipo de veículo que você procura (Carros, Motos ou Caminhões):");
         String veiculo = scan.nextLine();
+
+        if (veiculo.toLowerCase().contains("carr")) {
+            veiculo = "carros";
+        } else if (veiculo.toLowerCase().contains("moto")) {
+            veiculo = "motos";
+        } else {
+            veiculo = "caminhoes";
+        }
 
         var json = consumirAPI.obterDados(ENDERECO + veiculo + "/marcas");
         List<Dados> dados = conversor.converterLista(json, Dados.class);
@@ -72,8 +80,9 @@ public class MenuPrincipal {
         List<Dados> dadosAnos = conversor.converterLista(json, Dados.class);
 
         System.out.println(" ");
+        String finalVeiculo = veiculo;
         dadosAnos.forEach(ano -> {
-            String jsonVeiculo = consumirAPI.obterDados(ENDERECO + veiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos/" + modeloEscolhido.get().codigo() + "/anos/" + ano.codigo());
+            String jsonVeiculo = consumirAPI.obterDados(ENDERECO + finalVeiculo + "/marcas/" + marcaEscolhida.get().codigo() + "/modelos/" + modeloEscolhido.get().codigo() + "/anos/" + ano.codigo());
             DadosVeiculo dadosVeiculo = conversor.converterObjeto(jsonVeiculo, DadosVeiculo.class);
             System.out.println(dadosVeiculo);
         });
